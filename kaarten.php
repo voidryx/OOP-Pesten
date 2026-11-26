@@ -17,7 +17,7 @@ class kaart {
     }
 
     public function showkaart() {
-        echo $this->waarde . " van " . $this->teken;
+        echo '<img src="img/' . $this->teken . $this->waarde . '.svg" alt="' . $this->waarde . ' van ' . $this->teken . '">';
     }
 }
 
@@ -28,11 +28,6 @@ class Deck {
     function __construct()  {
         $this->kaarten = array();
         $this->MaakNieuwDeck();
-        foreach ($this->tekens as $teken) {
-            foreach ($this->waardes as $waarde) {
-                $this->kaarten[] = new kaart($waarde, $teken);
-            }
-        }
     }
     private function MaakNieuwDeck() {
         $nr=0;
@@ -51,5 +46,43 @@ class Deck {
             echo "</kaart>";
         }
         echo "</deck>";
+    }
+    public function rapen() {
+        if (empty($this->kaarten)) {
+            throw new UnderflowException("Er zitten geen kaarten meer in het deck.");
+        }
+
+        return array_shift($this->kaarten);
+    }
+    public function schudden() {
+        shuffle($this->kaarten);
+        shuffle($this->kaarten);
+    }
+}
+
+class hand {
+
+    private $Kaarten;
+    private $spelernr;
+    public function __construct($spelernr) {
+        $this->spelernr = $spelernr;
+        $this->Kaarten = array();
+    }
+    public function ToevoegenAanHand($kaart) {
+        array_push($this->Kaarten, $kaart);
+    }
+
+    public function getAantalKaarten() {
+        return count($this->Kaarten);
+    }
+
+    public function showhand() {
+        echo "<hand class='p" . $this->spelernr . "'>";
+        foreach ($this->Kaarten as $kaart) {
+            echo "<kaart>";
+            $kaart->showkaart();
+            echo "</kaart>";
+        }
+        echo "</hand>";
     }
 }
